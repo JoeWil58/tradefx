@@ -72,24 +72,22 @@ def insertNewReports(new_reports, report_type):
         # the connection is not autocommitted by default, so we must commit to save our # changes 
         cnxn.commit()
 
-start = time.time()
-failed = []
-symbols = getSymbols()
-tickers = getTickers(symbols)
-report_types = ['annual_cashflow', 'quarterly_cashflow', 'annual_balance', 'quarterly_balance', 'annual_income', 'quarterly_income']
-# report_types = ['quarterly_cashflow']
-for rtype in report_types:
-    reports, cols = getExistingReports(rtype)
-    for sym in symbols['symbol']:
-        print(f"{sym} | {rtype}")
-        try:
-            api_data = getAPIData(sym, tickers, rtype)
-            new_reports = checkNewDate(api_data, reports.loc[reports.symbol == sym])
-            if len(new_reports):
-                print(sym, rtype)
-                push_data = pivotData(new_reports, cols, sym)
-                insertNewReports(push_data, rtype)
-        except:
-            failed.append((sym, rtype))
-end = time.time()
-print(end - start)
+if __name__=="__main__":
+    failed = []
+    symbols = getSymbols()
+    tickers = getTickers(symbols)
+    report_types = ['annual_cashflow', 'quarterly_cashflow', 'annual_balance', 'quarterly_balance', 'annual_income', 'quarterly_income']
+    # report_types = ['quarterly_cashflow']
+    for rtype in report_types:
+        reports, cols = getExistingReports(rtype)
+        for sym in symbols['symbol']:
+            print(f"{sym} | {rtype}")
+            try:
+                api_data = getAPIData(sym, tickers, rtype)
+                new_reports = checkNewDate(api_data, reports.loc[reports.symbol == sym])
+                if len(new_reports):
+                    print(sym, rtype)
+                    push_data = pivotData(new_reports, cols, sym)
+                    insertNewReports(push_data, rtype)
+            except:
+                failed.append((sym, rtype))

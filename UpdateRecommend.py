@@ -77,19 +77,17 @@ def updateRecs(symbol, new_recs, old_recs):
             # the connection is not autocommitted by default, so we must commit to save our # changes 
             cnxn.commit()
 
-start = time.time()
-failed = []
-failed_rec_changes = []
-symbols = getSymbols()
-tickers = getTickers(symbols)
-old_recs_all = getOldRecs()
-for sym in symbols['symbol']:
-    try: 
-        print(sym)
-        new_recs = getRecs(sym, tickers)
-        old_recs = old_recs_all.loc[old_recs_all.symbol == sym].copy()
-        updateRecs(sym, new_recs, old_recs)
-    except:
-        failed.append(sym)
-end = time.time()
-print(end - start)
+if __name__=="__main__":
+    failed = []
+    failed_rec_changes = []
+    symbols = getSymbols()
+    tickers = getTickers(symbols)
+    old_recs_all = getOldRecs()
+    for sym in symbols['symbol']:
+        try: 
+            print(sym)
+            new_recs = getRecs(sym, tickers)
+            old_recs = old_recs_all.loc[old_recs_all.symbol == sym].copy()
+            updateRecs(sym, new_recs, old_recs)
+        except:
+            failed.append(sym)
