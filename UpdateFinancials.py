@@ -47,7 +47,7 @@ def getAPIData(symbol, tickers, report_type):
 def checkNewDate(api_data, db_data):
     api_dates = api_data.columns
     db_dates = db_data.report_date
-    date_check = api_dates.isin(db_dates)
+    date_check = api_dates.isin(db_dates.tolist())
     if not all(date_check):
         new_date_idx = np.where(date_check == False)[0]
         return api_data[api_dates[new_date_idx]]
